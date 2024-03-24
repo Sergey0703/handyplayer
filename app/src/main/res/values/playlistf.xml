@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="playlistf">
+        <item>Incy Wincy Spider</item>
+        <item>Head Shoulders Knees and Toes</item>
+        <item>Twinkle Twinkle Little Star</item>
+        <item>Jelly on a Plate</item>
+        <item>Sleeping Bunnies</item>
+        <item>Wind the Bobbin Up</item>
+        <item>If You\'re Happy and You Know It</item>
+        <item>The Wheels on the Bus</item>
+        <item>Pat a Cake Pat a Cake</item>
+        <item>Five Little Monkeys</item>
+
+    </string-array>
+</resources>
