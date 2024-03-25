@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -115,7 +116,15 @@ fun MainScreen(){
                   .background(color = Color(0, 81, 65)),
                   contentAlignment = Alignment.Center
               ) {
-                  Row {
+                  Row(
+                      modifier = Modifier
+                          //.background(Color.Gray)
+                          //.fillMaxSize(),
+                          .fillMaxWidth(),
+                           horizontalArrangement = Arrangement.SpaceEvenly,
+                           verticalAlignment = Alignment.CenterVertically
+
+                     ) {
                       Button(
                           onClick = { },
                           // modifier= Modifier.size(100.dp),
@@ -205,7 +214,7 @@ fun MainScreen(){
                             textAlign = TextAlign.Center,
                             //fontFamily = FontFamily.Serif,
                             fontFamily = irishGroverFontFamily,
-                            fontSize = 22.sp,
+                            fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
                             modifier = Modifier
