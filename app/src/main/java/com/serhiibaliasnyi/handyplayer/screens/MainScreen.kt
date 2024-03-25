@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +33,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -109,30 +111,68 @@ fun MainScreen(){
                       //height = Dimension.fillToConstraints
                       height = Dimension.percent(0.3f)
                   }
-                  .background(color = Color(0, 81, 65))
+                  .background(color = Color(0, 81, 65)),
+                  contentAlignment = Alignment.Center
               ) {
+                  Row {
+                      Button(
+                          onClick = { },
+                          // modifier= Modifier.size(100.dp),
+                          shape = CircleShape,
+                          // border= BorderStroke(5.dp, Color(0XFF0F9D58)),
+                          contentPadding = PaddingValues(0.dp),
+                          //colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                          colors = ButtonDefaults.outlinedButtonColors()
+                          //colors = ButtonDefaults.Transparent
+                      ) {
+                          // Adding an Icon "Add" inside the Button
+                          Icon(
+                              imageVector = ImageVector.vectorResource(R.drawable.button_prev),
+                              contentDescription = "content description",
+                              tint = Color(246, 151, 64),
+                              modifier = Modifier.size(100.dp)
+                          )
+                      }
 
 
+                      Button(
+                          onClick = { },
+                          // modifier= Modifier.size(100.dp),
+                          shape = CircleShape,
+                          // border= BorderStroke(5.dp, Color(0XFF0F9D58)),
+                          contentPadding = PaddingValues(0.dp),
+                          //colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                          colors = ButtonDefaults.outlinedButtonColors()
+                          //colors = ButtonDefaults.Transparent
+                      ) {
+                          // Adding an Icon "Add" inside the Button
+                          Icon(
+                              imageVector = ImageVector.vectorResource(R.drawable.button_play),
+                              contentDescription = "content description",
+                              tint = Color(246, 151, 64),
+                              modifier = Modifier.size(100.dp)
+                          )
+                      }
 
-
-                  Button(onClick = { },
-
-                     // modifier= Modifier.size(100.dp),
-                      shape = CircleShape,
-                     // border= BorderStroke(5.dp, Color(0XFF0F9D58)),
-                      contentPadding = PaddingValues(0.dp),
-                      //colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
-                      colors = ButtonDefaults.outlinedButtonColors()
-                      //colors = ButtonDefaults.Transparent
-                  ) {
-                      // Adding an Icon "Add" inside the Button
-                      Icon(imageVector =ImageVector.vectorResource(R.drawable.button_play) ,
-                          contentDescription = "content description",
-                          tint=Color(246,151,64),
-                          modifier = Modifier.size(100.dp)
-                      )
+                      Button(
+                          onClick = { },
+                          // modifier= Modifier.size(100.dp),
+                          shape = CircleShape,
+                          // border= BorderStroke(5.dp, Color(0XFF0F9D58)),
+                          contentPadding = PaddingValues(0.dp),
+                          //colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                          colors = ButtonDefaults.outlinedButtonColors()
+                          //colors = ButtonDefaults.Transparent
+                      ) {
+                          // Adding an Icon "Add" inside the Button
+                          Icon(
+                              imageVector = ImageVector.vectorResource(R.drawable.button_next),
+                              contentDescription = "content description",
+                              tint = Color(246, 151, 64),
+                              modifier = Modifier.size(100.dp)
+                          )
+                      }
                   }
-
               }
 
               Box(modifier =
