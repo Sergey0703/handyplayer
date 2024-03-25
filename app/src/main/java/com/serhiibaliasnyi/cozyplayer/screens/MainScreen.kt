@@ -27,6 +27,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,7 +54,9 @@ import com.serhiibaliasnyi.cozyplayer.ui.theme.irishGroverFontFamily
 @Composable
 @Preview(showSystemUi = true)
 fun MainScreen(){
-      var mainImage="image_default.jpg"
+      var mainImage= remember {
+          mutableStateOf("image0.jpg")
+      }
       Surface(
           modifier = Modifier
               .padding(0.dp)
@@ -95,7 +99,7 @@ fun MainScreen(){
                   )
 
                    */
-                  AssetImage(mainImage)
+                  AssetImage(mainImage.value)
               }
               Box(modifier = Modifier
                   // .size(300.dp, 300.dp)
@@ -217,8 +221,8 @@ fun MainScreen(){
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    mainImage="image"+index.toString()+".jpg";
-                                    Log.d("image",mainImage)
+                                    mainImage.value="image"+(index+1).toString()+".jpg";
+                                    Log.d("image",mainImage.value)
                                 }
                                 .padding(0.dp, 20.dp)
                                 .wrapContentWidth()
