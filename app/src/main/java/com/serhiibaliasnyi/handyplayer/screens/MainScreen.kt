@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.serhiibaliasnyi.handyplayer.R
+import com.serhiibaliasnyi.handyplayer.ui.theme.irishGroverFontFamily
 
 
 @Composable
@@ -179,7 +180,7 @@ fun MainScreen(){
               Modifier
                   .constrainAs(createRef()) {
                       // centerTo(parent)
-                      start.linkTo(firstRect.end, margin = 10.dp)
+                      start.linkTo(firstRect.end, margin = 5.dp)
                       end.linkTo(parent.end, margin = 0.dp)
                       top.linkTo(parent.top, margin = 0.dp)
                       bottom.linkTo(parent.bottom, margin = 0.dp)
@@ -202,7 +203,8 @@ fun MainScreen(){
                           ) {
                         Text(text = title,
                             textAlign = TextAlign.Center,
-                            fontFamily = FontFamily.Serif,
+                            //fontFamily = FontFamily.Serif,
+                            fontFamily = irishGroverFontFamily,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
