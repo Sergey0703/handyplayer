@@ -55,7 +55,7 @@ import com.serhiibaliasnyi.cozyplayer.ui.theme.irishGroverFontFamily
 @Preview(showSystemUi = true)
 fun MainScreen(){
       var mainImage= remember {
-          mutableStateOf("image0.jpg")
+          mutableStateOf(0)
       }
       Surface(
           modifier = Modifier
@@ -211,21 +211,27 @@ fun MainScreen(){
                             .fillMaxWidth()
                             .padding(3.dp)
                           ) {
+                        val color = if (index+1==mainImage.value) {
+                            Color(246, 151, 64)
+                        } else {
+                            Color.White
+                        }
                         Text(text = title,
                             textAlign = TextAlign.Center,
                             //fontFamily = FontFamily.Serif,
                             fontFamily = irishGroverFontFamily,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White,
+                            color = color,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    mainImage.value="image"+(index+1).toString()+".jpg";
-                                    Log.d("image",mainImage.value)
+                                    mainImage.value=index+1
+                                    Log.d("image",mainImage.value.toString())
                                 }
-                                .padding(0.dp, 20.dp)
                                 .wrapContentWidth()
+                                .padding(5.dp, 20.dp)
+
 
                         )
                     }
@@ -241,10 +247,10 @@ fun MainScreen(){
 
 
 @Composable
-fun AssetImage(imageName: String){
+fun AssetImage(imageName: Int){
     val context = LocalContext.current
     val assetManger = context.assets
-    val inputStream = assetManger.open(imageName)
+    val inputStream = assetManger.open("image"+imageName.toString()+".jpg")
     val bitMap = BitmapFactory.decodeStream(inputStream)
     Image(
         bitmap = bitMap.asImageBitmap(),
