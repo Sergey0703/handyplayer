@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "HandyPlayer"
+rootProject.name = "CozyPlayer"
 include(":app")
  

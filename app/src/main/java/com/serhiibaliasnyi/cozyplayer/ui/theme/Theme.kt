@@ -1,4 +1,4 @@
-package com.serhiibaliasnyi.handyplayer.ui.theme
+package com.serhiibaliasnyi.cozyplayer.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -38,7 +38,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun HandyPlayerTheme(
+fun CozyPlayerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,

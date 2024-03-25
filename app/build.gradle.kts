@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.serhiibaliasnyi.handyplayer"
+    namespace = "com.serhiibaliasnyi.cozyplayer"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.serhiibaliasnyi.handyplayer"
+        applicationId = "com.serhiibaliasnyi.cozyplayer"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

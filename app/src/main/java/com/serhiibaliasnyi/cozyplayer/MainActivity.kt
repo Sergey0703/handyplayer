@@ -1,22 +1,17 @@
-package com.serhiibaliasnyi.handyplayer
+package com.serhiibaliasnyi.cozyplayer
 
-import android.app.Activity
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.serhiibaliasnyi.handyplayer.screens.MainScreen
+import com.serhiibaliasnyi.cozyplayer.screens.MainScreen
+import com.serhiibaliasnyi.cozyplayer.ui.theme.CozyPlayerTheme
 //import androidx.constraintlayout.widget.ConstraintLayout
-import com.serhiibaliasnyi.handyplayer.ui.theme.HandyPlayerTheme
+//import com.serhiibaliasnyi.cozyplayer.ui.theme.HandyPlayerTheme
 
 class MainActivity : ComponentActivity() {
    override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +21,7 @@ class MainActivity : ComponentActivity() {
          //   val activity = (LocalContext.current as Activity)
          //   activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
-            HandyPlayerTheme {
+            CozyPlayerTheme {
                 // A surface container using the 'background' color from the theme
               //  Surface(
               //      modifier = Modifier.fillMaxSize(),
@@ -56,7 +51,7 @@ ConstraintLayout {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    HandyPlayerTheme {
+    CozyPlayerTheme {
         Greeting("Android")
     }
 }

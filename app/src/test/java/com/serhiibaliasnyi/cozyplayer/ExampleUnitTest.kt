@@ -1,4 +1,4 @@
-package com.serhiibaliasnyi.handyplayer
+package com.serhiibaliasnyi.cozyplayer
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.serhiibaliasnyi.handyplayer.ui.theme
+package com.serhiibaliasnyi.cozyplayer.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
