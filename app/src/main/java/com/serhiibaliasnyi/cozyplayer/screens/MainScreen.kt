@@ -1,7 +1,9 @@
 package com.serhiibaliasnyi.cozyplayer.screens
 
 import android.graphics.BitmapFactory
+import android.provider.CalendarContract
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 
 import androidx.compose.foundation.background
@@ -54,9 +56,14 @@ import com.serhiibaliasnyi.cozyplayer.ui.theme.irishGroverFontFamily
 @Composable
 @Preview(showSystemUi = true)
 fun MainScreen(){
-      var mainImage= remember {
+      val mainImage= remember {
           mutableStateOf(0)
       }
+
+      val stateOfSound= remember{
+          mutableStateOf(false)
+      }
+
       Surface(
           modifier = Modifier
               .padding(0.dp)
@@ -127,46 +134,65 @@ fun MainScreen(){
 
                      ) {
                       Button(
-                          onClick = { },
+                          onClick = {
+                              if(mainImage.value>1) mainImage.value= mainImage.value-1
+                           },
                           // modifier= Modifier.size(100.dp),
                           shape = CircleShape,
                           // border= BorderStroke(5.dp, Color(0XFF0F9D58)),
                           contentPadding = PaddingValues(0.dp),
-                          //colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                          //colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.White)
                           colors = ButtonDefaults.outlinedButtonColors()
-                          //colors = ButtonDefaults.Transparent
+                          //colors = Color(246, 151, 64),
                       ) {
                           // Adding an Icon "Add" inside the Button
                           Icon(
                               imageVector = ImageVector.vectorResource(R.drawable.button_prev),
                               contentDescription = "content description",
-                              tint = Color(246, 151, 64),
+                             // tint = Color(246, 151, 64),
+                              tint = Color(255, 255, 255),
                               modifier = Modifier.size(100.dp)
                           )
                       }
 
 
                       Button(
-                          onClick = { },
+                          onClick = {
+                              stateOfSound.value=!stateOfSound.value
+                              Log.d("state",stateOfSound.value.toString())
+                          },
                           // modifier= Modifier.size(100.dp),
                           shape = CircleShape,
-                          // border= BorderStroke(5.dp, Color(0XFF0F9D58)),
+                          // border= BorderStroke(8.dp, Color(246, 151, 64)),
                           contentPadding = PaddingValues(0.dp),
                           //colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
                           colors = ButtonDefaults.outlinedButtonColors()
                           //colors = ButtonDefaults.Transparent
                       ) {
                           // Adding an Icon "Add" inside the Button
+                          if(!stateOfSound.value){
                           Icon(
                               imageVector = ImageVector.vectorResource(R.drawable.button_play),
                               contentDescription = "content description",
                               tint = Color(246, 151, 64),
+                              //tint = Color(255, 255, 255),
                               modifier = Modifier.size(100.dp)
-                          )
+                          )} else{
+                              Icon(
+                                  imageVector = ImageVector.vectorResource(R.drawable.button_pause),
+                                  contentDescription = "content description",
+                                  tint = Color(246, 151, 64),
+                                  //tint = Color(255, 255, 255),
+                                  modifier = Modifier.size(100.dp)
+                              )
+                          }
                       }
 
                       Button(
-                          onClick = { },
+                          onClick = {
+                              if(mainImage.value<list.size)
+                              mainImage.value= mainImage.value+1
+                          },
                           // modifier= Modifier.size(100.dp),
                           shape = CircleShape,
                           // border= BorderStroke(5.dp, Color(0XFF0F9D58)),
@@ -179,7 +205,8 @@ fun MainScreen(){
                           Icon(
                               imageVector = ImageVector.vectorResource(R.drawable.button_next),
                               contentDescription = "content description",
-                              tint = Color(246, 151, 64),
+                              //tint = Color(246, 151, 64),
+                              tint = Color(255, 255, 255),
                               modifier = Modifier.size(100.dp)
                           )
                       }
