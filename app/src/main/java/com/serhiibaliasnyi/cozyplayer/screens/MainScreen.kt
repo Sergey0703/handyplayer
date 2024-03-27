@@ -60,6 +60,7 @@ import com.serhiibaliasnyi.cozyplayer.ui.theme.irishGroverFontFamily
 import androidx.media3.common.MediaItem
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathOperation
+import androidx.media3.common.C
 //import com.example.musicplayer.ui.theme.MusicPlayerTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -68,9 +69,9 @@ import kotlinx.coroutines.launch
 @Composable
 //@Preview(showSystemUi = true)
 fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
-      val listTrack=listOf(R.raw.track1,R.raw.track2,R.raw.track3,R.raw.track4,R.raw.track5,
-          R.raw.track6,R.raw.track7,R.raw.track8,R.raw.track9,R.raw.track10
-          )
+    //  val listTrack=listOf(R.raw.track1,R.raw.track2,R.raw.track3,R.raw.track4,R.raw.track5,
+      //    R.raw.track6,R.raw.track7,R.raw.track8,R.raw.track9,R.raw.track10
+        //  )
      // var mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.track1)
      //lateinit  var mediaPlayer:MediaPlayer
     var mediaPlayer = MediaPlayer()
@@ -204,11 +205,23 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                       Button(
                           onClick = {
                               if(numberOfTrack.value>1) {
-                                  numberOfTrack.value -= 1
-                                  player.seekToPreviousMediaItem()
-                                  coroutineScope.launch {
-                                      listState.animateScrollToItem(numberOfTrack.value)
+                                  if(player.isPlaying) {
+                                      //    numberOfTrack.value -= 1
+                                      player.seekToPreviousMediaItem()
+                                      coroutineScope.launch {
+                                          // listState.animateScrollToItem(numberOfTrack.value)
+                                      listState.animateScrollToItem(playingSongIndex.intValue)
+                                      }
+                                      numberOfTrack.value =playingSongIndex.intValue
+                                  }else{
+                                      numberOfTrack.value -= 1
+                                      coroutineScope.launch {
+                                          // listState.animateScrollToItem(numberOfTrack.value)
+                                          listState.animateScrollToItem(numberOfTrack.value-1)
+                                      }
+
                                   }
+
                               }
                            },
                           // modifier= Modifier.size(100.dp),
@@ -234,11 +247,21 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
 
                           onClick = {
                               if (isPlaying.value) {
+
                                   player.pause()
+                                  isPlaying.value = false
                               } else {
+                                  var track=numberOfTrack.value-1;
+                                  if(numberOfTrack.value==0){
+                                      track=0
+                                      numberOfTrack.value=1
+                                  }
+                                  player.seekTo(track, C.TIME_UNSET);
+                                  player.setPlayWhenReady(true);
                                   player.play()
+                                  isPlaying.value = true
                               }
-                              isPlaying.value = player.isPlaying
+
                             /*
                               Log.d("state",isPlaying.value.toString())
                               if(numberOfTrack.value==0){ numberOfTrack.value=1}
@@ -304,11 +327,18 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                       Button(
                           onClick = {
                               if(numberOfTrack.value<list.size) {
-                                  numberOfTrack.value = numberOfTrack.value + 1
+                                  if(player.isPlaying){
                                   player.seekToNextMediaItem()
                                   Log.d("state",player.seekToNextMediaItem().toString())
                                   coroutineScope.launch {
-                                      listState.animateScrollToItem(numberOfTrack.value)
+                                      listState.animateScrollToItem(playingSongIndex.intValue)
+                                  }
+                                  numberOfTrack.value =playingSongIndex.intValue
+                                  }else{
+                                      numberOfTrack.value = numberOfTrack.value + 1
+                                      coroutineScope.launch {
+                                          listState.animateScrollToItem(numberOfTrack.value-1)
+                                      }
                                   }
                               }
                           },
