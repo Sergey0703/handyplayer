@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                 music = R.raw.track6
             ),
             Music(
-                name = "If You\\'re Happy and You Know It",
+                name = "If You\'re Happy and You Know It",
                 cover = "assets.image7",
                 music = R.raw.track7
             ),

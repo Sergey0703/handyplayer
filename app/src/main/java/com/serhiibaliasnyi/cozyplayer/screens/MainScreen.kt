@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.media.browse.MediaBrowser
 import android.net.Uri
+import android.service.controls.templates.ControlButton
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,8 +34,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,6 +62,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathOperation
 //import com.example.musicplayer.ui.theme.MusicPlayerTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -70,8 +75,12 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
      //lateinit  var mediaPlayer:MediaPlayer
     var mediaPlayer = MediaPlayer()
     //val list:List<String>
+    val listState = rememberLazyListState()
+// Remember a CoroutineScope to be able to launch
+    val coroutineScope = rememberCoroutineScope()
     val list = mutableListOf<String>()
-    var i:Int=0
+
+    //var i:Int=0
     LaunchedEffect(Unit) {
         playList.forEach {
             val path = "android.resource://" + "com.serhiibaliasnyi.cozyplayer" + "/" + it.music
@@ -89,6 +98,23 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
       val numberOfTrack= remember {
           mutableStateOf(0)
       }
+
+      val playingSongIndex = remember {
+         mutableIntStateOf(0)
+      }
+
+      LaunchedEffect(player.currentMediaItemIndex) {
+          playingSongIndex.intValue = player.currentMediaItemIndex
+          Log.d("state",playingSongIndex.toString())
+          coroutineScope.launch {
+              numberOfTrack.value= playingSongIndex.intValue
+              listState.animateScrollToItem(playingSongIndex.intValue)
+          }
+        //pagerState.animateScrollToPage(
+          //  playingSongIndex.intValue,
+          //  animationSpec = tween(500)
+        //)
+    }
 
       val isPlaying= remember{
           mutableStateOf(false)
@@ -172,9 +198,18 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                            verticalAlignment = Alignment.CenterVertically
 
                      ) {
+//                      ControlButton(icon = R.drawable.ic_previous, size = 40.dp, onClick = {
+//                          player.seekToPreviousMediaItem()
+//                      })
                       Button(
                           onClick = {
-                              if(numberOfTrack.value>1) numberOfTrack.value -= 1
+                              if(numberOfTrack.value>1) {
+                                  numberOfTrack.value -= 1
+                                  player.seekToPreviousMediaItem()
+                                  coroutineScope.launch {
+                                      listState.animateScrollToItem(numberOfTrack.value)
+                                  }
+                              }
                            },
                           // modifier= Modifier.size(100.dp),
                           shape = CircleShape,
@@ -268,8 +303,14 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
 
                       Button(
                           onClick = {
-                              if(numberOfTrack.value<list.size)
-                             numberOfTrack.value= numberOfTrack.value+1
+                              if(numberOfTrack.value<list.size) {
+                                  numberOfTrack.value = numberOfTrack.value + 1
+                                  player.seekToNextMediaItem()
+                                  Log.d("state",player.seekToNextMediaItem().toString())
+                                  coroutineScope.launch {
+                                      listState.animateScrollToItem(numberOfTrack.value)
+                                  }
+                              }
                           },
                           // modifier= Modifier.size(100.dp),
                           shape = CircleShape,
@@ -305,7 +346,7 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                   }
                   .background(color = Color(125, 150, 141))
               ) {
-                   LazyColumn {
+                   LazyColumn(state = listState) {
                     //itemsIndexed(list){index, title->
                     itemsIndexed(playList){index, title->
                     Card(
