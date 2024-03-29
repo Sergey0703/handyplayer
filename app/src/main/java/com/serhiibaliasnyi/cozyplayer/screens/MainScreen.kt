@@ -1,19 +1,17 @@
 package com.serhiibaliasnyi.cozyplayer.screens
 
-//import android.content.Context
 
-import android.content.Context
+//import com.example.musicplayer.ui.theme.MusicPlayerTheme
 import android.graphics.BitmapFactory
-import android.media.MediaPlayer
-import android.media.browse.MediaBrowser
 import android.net.Uri
-import android.service.controls.templates.ControlButton
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,7 +28,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,7 +42,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,29 +49,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.media3.common.C
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.common.Tracks
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.serhiibaliasnyi.cozyplayer.MainActivity
 import com.serhiibaliasnyi.cozyplayer.R
 import com.serhiibaliasnyi.cozyplayer.ui.theme.irishGroverFontFamily
-import androidx.media3.common.MediaItem
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathOperation
-import androidx.media3.common.C
-//import com.example.musicplayer.ui.theme.MusicPlayerTheme
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+//import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
-@Composable
+
+@androidx.annotation.OptIn(UnstableApi::class) @Composable
+@OptIn(ExperimentalFoundationApi::class)
 //@Preview(showSystemUi = true)
-fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
-    //  val listTrack=listOf(R.raw.track1,R.raw.track2,R.raw.track3,R.raw.track4,R.raw.track5,
-      //    R.raw.track6,R.raw.track7,R.raw.track8,R.raw.track9,R.raw.track10
-        //  )
-     // var mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.track1)
-     //lateinit  var mediaPlayer:MediaPlayer
-    var mediaPlayer = MediaPlayer()
-    //val list:List<String>
+fun MainScreen(playList: List<MainActivity.Music>){
+    Log.d("counter", "Recomposition-------------------------------------------------------")
+     lateinit var player: ExoPlayer
+     //val context = ContextAmbient.current
+     val context = LocalContext.current
+     player = ExoPlayer.Builder(context).build()
+
     val listState = rememberLazyListState()
 // Remember a CoroutineScope to be able to launch
     val coroutineScope = rememberCoroutineScope()
@@ -83,6 +80,7 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
 
     //var i:Int=0
     LaunchedEffect(Unit) {
+        Log.d("counter","Launch0="+player.currentMediaItemIndex.toString())
         playList.forEach {
             val path = "android.resource://" + "com.serhiibaliasnyi.cozyplayer" + "/" + it.music
             val mediaItem = MediaItem.fromUri(Uri.parse(path))
@@ -91,11 +89,8 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
         }
     }
     player.prepare()
-    //mediaPlayer=null
-   // mediaPlayer.setDataSource(filepath)
 
-      //var track=R.raw.track1
-      val context = LocalContext.current
+
       val numberOfTrack= remember {
           mutableStateOf(0)
       }
@@ -104,39 +99,65 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
          mutableIntStateOf(0)
       }
 
+      var firstLaunch= remember {
+          true //mutableStateOf(true)
+      }
       LaunchedEffect(player.currentMediaItemIndex) {
-          playingSongIndex.intValue = player.currentMediaItemIndex
-          Log.d("state",playingSongIndex.toString())
+      //LaunchedEffect(player.currentMediaItemIndex) {
+
+         // playingSongIndex.intValue = player.currentMediaItemIndex
+          playingSongIndex.value = player.currentMediaItemIndex
+          Log.d("counter","Launch="+player.currentMediaItemIndex.toString())
           coroutineScope.launch {
-              numberOfTrack.value= playingSongIndex.intValue
-              listState.animateScrollToItem(playingSongIndex.intValue)
+
+              listState.animateScrollToItem(player.currentMediaItemIndex)
           }
-        //pagerState.animateScrollToPage(
-          //  playingSongIndex.intValue,
-          //  animationSpec = tween(500)
-        //)
+       //   numberOfTrack.value= playingSongIndex.intValue
+
     }
 
       val isPlaying= remember{
           mutableStateOf(false)
       }
-     //var track=R.raw.track1
-     //var track=R.raw.track1;
-    // val mediaPlayer:MediaPlayer by remember {
-    //    mutableStateOf(MediaPlayer.create(context,listTrack[numberOfTrack.value]))
-    // }
+      player.addListener(
+        object : Player.Listener {
+            override fun onTracksChanged(tracks: Tracks) {
+                // Update UI using current tracks.
+                Log.d("counter","updateTrack="+tracks.toString())
+                Log.d("counter","player.currentMediaItemIndex="+player.currentMediaItemIndex.toString())
+                 if(!firstLaunch) numberOfTrack.value =player.currentMediaItemIndex+1;
+                 Log.d("counter","firstLaunch="+firstLaunch)
+                coroutineScope.launch {
+                    listState.animateScrollToItem(player.currentMediaItemIndex)
+                }
+            // Log.d("counter","updateTrack="+playingSongIndex.value.toString())
+            }
+            override fun onPlaybackStateChanged(state: Int) {
+                if (state == Player.STATE_ENDED) {
+                    isPlaying.value=false
+                }
+            }
+
+            /*
+            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+                if (playWhenReady && playbackState == Player.STATE_READY) {
+                    // media actually playing
+
+                } else if (playWhenReady) {
+                    // might be idle (plays after prepare()),
+                    // buffering (plays when data available)
+                    // or ended (plays when seek away from end)
+                } else {
+                    // player paused in any state
+                  //  isPlaying.value=false
+                }
+              }
+            */
+        }
+    )
 
 
 
-      Surface(
-          modifier = Modifier
-              .padding(0.dp)
-              .fillMaxSize(),
-          color = Color(125,150,141)
-      ) {
-
-       //   val list = stringArrayResource(id = R.array.playlistf)
-          //val list =playList
           ConstraintLayout(modifier = Modifier
               .padding(5.dp)) {
 
@@ -153,25 +174,14 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                       width = Dimension.percent(0.6f)
                       //height=Dimension.value(300.dp)
                       //height = Dimension.fillToConstraints
-                      height = Dimension.percent(0.7f)
+                      height = Dimension.percent(0.6f)
                   }
                   //.background(color = Color.Red)
                   .background(color = Color(125, 150, 141))
 
               ) {
-                  /*Image(
-                      //painter = painterResource(id = R.drawable.default_screen),
-                      painter = painterResource(id = R.drawable.default_screen),
-                      contentDescription = null, //stringResource(id = R.string.dog_content_description),
-                      contentScale = ContentScale.Crop,
-                      modifier = Modifier
-                          .fillMaxSize()
-                          //.size(200.dp)
-                          .clip(RoundedCornerShape(5.dp))
-                  )
 
-                   */
-                  AssetImage(numberOfTrack.value,mediaPlayer)
+                  AssetImage(numberOfTrack.value)
                  // mediaPlayer= AssetPlayer(numberOfTrack.value)
               }
               Box(modifier = Modifier
@@ -185,11 +195,12 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                       width = Dimension.percent(0.6f)
                       //height=Dimension.value(300.dp)
                       //height = Dimension.fillToConstraints
-                      height = Dimension.percent(0.3f)
+                      height = Dimension.percent(0.4f)
                   }
                   .background(color = Color(0, 81, 65)),
                   contentAlignment = Alignment.Center
               ) {
+                  Column(){
                   Row(
                       modifier = Modifier
                           //.background(Color.Gray)
@@ -204,19 +215,19 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
 //                      })
                       Button(
                           onClick = {
+
                               if(numberOfTrack.value>1) {
                                   if(player.isPlaying) {
                                       //    numberOfTrack.value -= 1
                                       player.seekToPreviousMediaItem()
                                       coroutineScope.launch {
                                           // listState.animateScrollToItem(numberOfTrack.value)
-                                      listState.animateScrollToItem(playingSongIndex.intValue)
+                                     // listState.animateScrollToItem(playingSongIndex.value)
                                       }
-                                      numberOfTrack.value =playingSongIndex.intValue
+                                      numberOfTrack.value =player.currentMediaItemIndex+1
                                   }else{
                                       numberOfTrack.value -= 1
                                       coroutineScope.launch {
-                                          // listState.animateScrollToItem(numberOfTrack.value)
                                           listState.animateScrollToItem(numberOfTrack.value-1)
                                       }
 
@@ -246,6 +257,7 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                       Button(
 
                           onClick = {
+                              firstLaunch=false;
                               if (isPlaying.value) {
 
                                   player.pause()
@@ -262,44 +274,10 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                                   isPlaying.value = true
                               }
 
-                            /*
-                              Log.d("state",isPlaying.value.toString())
-                              if(numberOfTrack.value==0){ numberOfTrack.value=1}
-                              isPlaying.value=!isPlaying.value
-                              //val context = this
-                              //val assetManger = context.assets
-                              Log.d("state",numberOfTrack.value.toString())
-                             if(isPlaying.value){
-                                // Log.d("state", mediaPlayer.toString())
-                                 //if (mediaPlayer == null) {
-                                 val isPaused =
-                                     !mediaPlayer.isPlaying && mediaPlayer.currentPosition > 1
-                                 if (!isPaused) {
-                                     Log.d("state", numberOfTrack.value.toString())
-                                     mediaPlayer.stop()
-                                     mediaPlayer.reset()
-                                     mediaPlayer.release()
-                                  //   mediaPlayer=null
-                                     mediaPlayer = MediaPlayer.create(context, listTrack[numberOfTrack.value-1]);
-                                     mediaPlayer.start()
-                                 }else {
-                                     mediaPlayer.start()
-                                 }
-                                 //AssetPlayer(numberOfTrack.value, context,"start")
-                             }else{
-                                 if (mediaPlayer != null) {
-                                     mediaPlayer?.pause()
-                                     Log.d("state","pause")
-                                 }
-                                 //AssetPlayer(numberOfTrack.value, context,"pause")
-                             }
-
-                             */
-
                           },
                           // modifier= Modifier.size(100.dp),
                           shape = CircleShape,
-                          // border= BorderStroke(8.dp, Color(246, 151, 64)),
+                          //border= BorderStroke(7.dp, Color(255, 255, 255)),
                           contentPadding = PaddingValues(0.dp),
                           //colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
                           colors = ButtonDefaults.outlinedButtonColors()
@@ -312,7 +290,10 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                               contentDescription = "content description",
                               tint = Color(246, 151, 64),
                               //tint = Color(255, 255, 255),
-                              modifier = Modifier.size(100.dp)
+                              modifier = Modifier
+                                  .size(100.dp)
+                                  .padding(0.dp),
+                             // size=20.dp
                           )} else{
                               Icon(
                                   imageVector = ImageVector.vectorResource(R.drawable.button_pause),
@@ -329,11 +310,11 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                               if(numberOfTrack.value<list.size) {
                                   if(player.isPlaying){
                                   player.seekToNextMediaItem()
-                                  Log.d("state",player.seekToNextMediaItem().toString())
+                                  //Log.d("state",player.seekToNextMediaItem().toString())
                                   coroutineScope.launch {
-                                      listState.animateScrollToItem(playingSongIndex.intValue)
+                                     // listState.animateScrollToItem(playingSongIndex.value)
                                   }
-                                  numberOfTrack.value =playingSongIndex.intValue
+                                      numberOfTrack.value =player.currentMediaItemIndex+1
                                   }else{
                                       numberOfTrack.value = numberOfTrack.value + 1
                                       coroutineScope.launch {
@@ -360,6 +341,9 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                           )
                       }
                   }
+
+                  }
+
               }
 
               Box(modifier =
@@ -403,9 +387,9 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    //mediaPlayer = null
                                     numberOfTrack.value = index + 1
-                                    Log.d("image", numberOfTrack.value.toString())
+                                    //playingSongIndex.value=index;
+                                    // Log.d("image", numberOfTrack.value.toString())
                                 }
                                 .wrapContentWidth()
                                 .padding(5.dp, 20.dp)
@@ -419,20 +403,14 @@ fun MainScreen(player:ExoPlayer,playList: List<MainActivity.Music>){
               }
 
           }
-      }
+      //}
 
 }
 
 
 @Composable
-fun AssetImage(trackName: Int, mediaPlayer: MediaPlayer?){
-    if (mediaPlayer != null) {
-      //  mediaPlayer.stop()
-        //mediaPlayer.reset()
-        //mediaPlayer.release()
-        //mediaPlayer =null
-        Log.d("state", "asset")
-    }
+fun AssetImage(trackName: Int){
+
 
     val context = LocalContext.current
     val assetManger = context.assets
@@ -444,17 +422,5 @@ fun AssetImage(trackName: Int, mediaPlayer: MediaPlayer?){
         contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxSize()
     )
-    //return null
-}
-//@Composable
-fun AssetPlayer(trackName: Int, context: Context,comand: String){
-    //val context = LocalContext.current
-    //val assetManger = context.assets
-    if(comand=="start") {
-      //  val mediaPlayer = MediaPlayer.create(context, )
-     //   mediaPlayer.start()
-    }
-   // return mediaPlayer
-   // mediaPlayer.start()
 
 }
