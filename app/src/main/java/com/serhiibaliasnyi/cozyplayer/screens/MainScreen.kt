@@ -153,6 +153,21 @@ fun MainScreen(playList: List<MainActivity.Music>){
                     isPlaying.value = false
                 }
             }
+
+            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+                if (playWhenReady && playbackState == Player.STATE_READY) {
+                    // media actually playing
+                    Log.d("counter","LaunchP------")
+                  //  delay(1000)
+                } else if (playWhenReady) {
+                    // might be idle (plays after prepare()),
+                    // buffering (plays when data available)
+                    // or ended (plays when seek away from end)
+                } else {
+                    // player paused in any state
+                    //  isPlaying.value=false
+                }
+            }
         }
      )
 
@@ -169,23 +184,8 @@ fun MainScreen(playList: List<MainActivity.Music>){
             }
 
 
-            LaunchedEffect(key1 = player.currentPosition, key2 = player.isPlaying) {
-              //  Log.d("counter","Launch4")
-                delay(1000)
-                currentPosition.longValue = player.currentPosition
-            }
 
-            LaunchedEffect(currentPosition.longValue) {
-               // Log.d("counter","Launch5")
-                sliderPosition.longValue = currentPosition.longValue
-            }
 
-            LaunchedEffect(player.duration) {
-              //  Log.d("counter","Launch6")
-                if (player.duration > 0) {
-                    totalDuration.longValue = player.duration
-                }
-            }
 
             /*
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
@@ -209,6 +209,23 @@ fun MainScreen(playList: List<MainActivity.Music>){
 
           ConstraintLayout(modifier = Modifier
               .padding(5.dp)) {
+              LaunchedEffect(key1 = player.currentPosition, key2 = player.isPlaying) {
+                  Log.d("counter","Launch4")
+                  delay(1000)
+                  currentPosition.longValue = player.currentPosition
+              }
+
+              LaunchedEffect(currentPosition.longValue) {
+                  Log.d("counter","Launch5")
+                  sliderPosition.longValue = currentPosition.longValue
+              }
+
+              LaunchedEffect(player.duration) {
+                  //  Log.d("counter","Launch6")
+                  if (player.duration > 0) {
+                      totalDuration.longValue = player.duration
+                  }
+              }
 
               val firstRect = createRef()
               val dashboardRec = createRef()
@@ -259,9 +276,10 @@ fun MainScreen(playList: List<MainActivity.Music>){
                               horizontalArrangement = Arrangement.Center,
 
                       ) {
-
+                       //   Log.d("counter","value="+sliderPosition.longValue.toFloat())
                           TrackSlider(
                               value = sliderPosition.longValue.toFloat(),
+
                               onValueChange = {
                                   sliderPosition.longValue = it.toLong()
                               },
@@ -271,6 +289,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                               },
                               songDuration = totalDuration.longValue.toFloat()
                           )
+
                           Row(
                               modifier = Modifier.fillMaxWidth(),
                           ) {
@@ -558,8 +577,8 @@ fun TrackSlider(
         },
         valueRange = 0f..songDuration,
         colors = SliderDefaults.colors(
-            thumbColor = Color.White,
-            activeTrackColor = Color.DarkGray,
+            thumbColor = Color(246, 151, 64),
+            activeTrackColor = Color(246, 151, 64),
             inactiveTrackColor = Color.White,
         )
     )
