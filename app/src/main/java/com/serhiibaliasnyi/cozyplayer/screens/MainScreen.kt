@@ -174,7 +174,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                       width = Dimension.percent(0.6f)
                       //height=Dimension.value(300.dp)
                       //height = Dimension.fillToConstraints
-                      height = Dimension.percent(0.6f)
+                      height = Dimension.percent(0.7f)
                   }
                   //.background(color = Color.Red)
                   .background(color = Color(125, 150, 141))
@@ -195,7 +195,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                       width = Dimension.percent(0.6f)
                       //height=Dimension.value(300.dp)
                       //height = Dimension.fillToConstraints
-                      height = Dimension.percent(0.4f)
+                      height = Dimension.percent(0.3f)
                   }
                   .background(color = Color(0, 81, 65)),
                   contentAlignment = Alignment.Center
@@ -263,12 +263,23 @@ fun MainScreen(playList: List<MainActivity.Music>){
                                   player.pause()
                                   isPlaying.value = false
                               } else {
-                                  var track=numberOfTrack.value-1;
-                                  if(numberOfTrack.value==0){
-                                      track=0
-                                      numberOfTrack.value=1
+                                  if(player.currentMediaItemIndex!=numberOfTrack.value-1){
+                                     // player.play()
+                                  //}else {
+                                     /* var track = numberOfTrack.value - 1;
+                                      if (numberOfTrack.value == 0) {
+                                          track = 0
+                                          numberOfTrack.value = 1
+                                        player.seekTo(track, C.TIME_UNSET);
+                                       */
+                                      if (numberOfTrack.value == 0) {
+                                          player.seekTo(0, C.TIME_UNSET);
+                                          numberOfTrack.value = 1
+                                      }else{
+                                          player.seekTo(numberOfTrack.value - 1, C.TIME_UNSET);
+                                      }
+
                                   }
-                                  player.seekTo(track, C.TIME_UNSET);
                                   player.setPlayWhenReady(true);
                                   player.play()
                                   isPlaying.value = true
@@ -387,6 +398,17 @@ fun MainScreen(playList: List<MainActivity.Music>){
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
+                                    if (isPlaying.value) {
+                                       // var track=numberOfTrack.value-1;
+                                       // if(numberOfTrack.value==0){
+                                       //     track=0
+                                       //     numberOfTrack.value=1
+                                       // }
+                                        player.seekTo(index, C.TIME_UNSET);
+                                        player.setPlayWhenReady(true);
+                                        player.play()
+                                        //isPlaying.value = true
+                                    }
                                     numberOfTrack.value = index + 1
                                     //playingSongIndex.value=index;
                                     // Log.d("image", numberOfTrack.value.toString())

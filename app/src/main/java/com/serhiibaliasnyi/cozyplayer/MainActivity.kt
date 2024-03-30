@@ -169,6 +169,56 @@ class MainActivity : ComponentActivity() {
                 cover = "assets.image10",
                 music = R.raw.track10
             ),
+            Music(
+                name = "I'm a Little Teapot",
+                cover = "assets.image11",
+                music = R.raw.track11
+            ),
+            Music(
+                name = "Hey Diddle Diddle",
+                cover = "assets.image12",
+                music = R.raw.track12
+            ),
+            Music(
+                name = "One Two Buckle My Shoe",
+                cover = "assets.image13",
+                music = R.raw.track13
+            ),
+            Music(
+                name = "Old MacDonald Had a Farm",
+                cover = "assets.image14",
+                music = R.raw.track14
+            ),
+            Music(
+                name = "This Is the Way the Ladies Ride",
+                cover = "assets.image15",
+                music = R.raw.track15
+            ),
+            Music(
+                name = "Teddy Bear's Picnic",
+                cover = "assets.image16",
+                music = R.raw.track16
+            ),
+            Music(
+                name = "The Animals Went in Two by Two",
+                cover = "assets.image17",
+                music = R.raw.track17
+            ),
+            Music(
+                name = "Row Row Row Your Boat",
+                cover = "assets.image18",
+                music = R.raw.track18
+            ),
+            Music(
+                name = "Old King Cole",
+                cover = "assets.image19",
+                music = R.raw.track19
+            ),
+            Music(
+                name = "1 2 3 4 5 Once I Caught a Fish Alive",
+                cover = "assets.image20",
+                music = R.raw.track20
+            ),
         )
     }
 
