@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -28,10 +31,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,12 +49,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.content.ContextCompat
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -58,7 +66,11 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.serhiibaliasnyi.cozyplayer.MainActivity
 import com.serhiibaliasnyi.cozyplayer.R
 import com.serhiibaliasnyi.cozyplayer.ui.theme.irishGroverFontFamily
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+//import kotlin.coroutines.jvm.internal.CompletedContinuation.context
+
+//import java.time.format.TextStyle
 
 //import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
@@ -123,18 +135,55 @@ fun MainScreen(playList: List<MainActivity.Music>){
         object : Player.Listener {
             override fun onTracksChanged(tracks: Tracks) {
                 // Update UI using current tracks.
-                Log.d("counter","updateTrack="+tracks.toString())
-                Log.d("counter","player.currentMediaItemIndex="+player.currentMediaItemIndex.toString())
-                 if(!firstLaunch) numberOfTrack.value =player.currentMediaItemIndex+1;
-                 Log.d("counter","firstLaunch="+firstLaunch)
+                Log.d("counter", "updateTrack=" + tracks.toString())
+                Log.d(
+                    "counter",
+                    "player.currentMediaItemIndex=" + player.currentMediaItemIndex.toString()
+                )
+                if (!firstLaunch) numberOfTrack.value = player.currentMediaItemIndex + 1;
+                Log.d("counter", "firstLaunch=" + firstLaunch)
                 coroutineScope.launch {
                     listState.animateScrollToItem(player.currentMediaItemIndex)
                 }
-            // Log.d("counter","updateTrack="+playingSongIndex.value.toString())
+                // Log.d("counter","updateTrack="+playingSongIndex.value.toString())
             }
+
             override fun onPlaybackStateChanged(state: Int) {
                 if (state == Player.STATE_ENDED) {
-                    isPlaying.value=false
+                    isPlaying.value = false
+                }
+            }
+        }
+     )
+
+            val currentPosition = remember {
+                mutableLongStateOf(0)
+            }
+
+            val sliderPosition = remember {
+                mutableLongStateOf(0)
+            }
+
+            val totalDuration = remember {
+                mutableLongStateOf(0)
+            }
+
+
+            LaunchedEffect(key1 = player.currentPosition, key2 = player.isPlaying) {
+              //  Log.d("counter","Launch4")
+                delay(1000)
+                currentPosition.longValue = player.currentPosition
+            }
+
+            LaunchedEffect(currentPosition.longValue) {
+               // Log.d("counter","Launch5")
+                sliderPosition.longValue = currentPosition.longValue
+            }
+
+            LaunchedEffect(player.duration) {
+              //  Log.d("counter","Launch6")
+                if (player.duration > 0) {
+                    totalDuration.longValue = player.duration
                 }
             }
 
@@ -153,8 +202,8 @@ fun MainScreen(playList: List<MainActivity.Music>){
                 }
               }
             */
-        }
-    )
+
+
 
 
 
@@ -201,6 +250,51 @@ fun MainScreen(playList: List<MainActivity.Music>){
                   contentAlignment = Alignment.Center
               ) {
                   Column(){
+                      Row(
+                          modifier = Modifier
+                              //.fillMaxWidth(.9f)
+                              //.background(Color.Gray)
+                              .fillMaxHeight(.2f)
+                              .padding(horizontal = 5.dp),
+                              horizontalArrangement = Arrangement.Center,
+
+                      ) {
+
+                          TrackSlider(
+                              value = sliderPosition.longValue.toFloat(),
+                              onValueChange = {
+                                  sliderPosition.longValue = it.toLong()
+                              },
+                              onValueChangeFinished = {
+                                  currentPosition.longValue = sliderPosition.longValue
+                                  player.seekTo(sliderPosition.longValue)
+                              },
+                              songDuration = totalDuration.longValue.toFloat()
+                          )
+                          Row(
+                              modifier = Modifier.fillMaxWidth(),
+                          ) {
+
+                              Text(
+                                  text = (currentPosition.longValue).convertToText(),
+                                  modifier = Modifier
+                                      .height(20.dp)
+                                      .padding(8.dp),
+                                  color = Color.Black,
+                                  style = TextStyle(fontWeight = FontWeight.Bold)
+                              )
+
+                              val remainTime = totalDuration.longValue - currentPosition.longValue
+                              Text(
+                                  text = if (remainTime >= 0) remainTime.convertToText() else "",
+                                  modifier = Modifier
+                                      .padding(8.dp),
+                                  color = Color.Black,
+                                  style = TextStyle(fontWeight = FontWeight.Bold)
+                              )
+                          }
+                      }
+                      //Spacer(modifier = Modifier.height(20.dp))
                   Row(
                       modifier = Modifier
                           //.background(Color.Gray)
@@ -428,7 +522,48 @@ fun MainScreen(playList: List<MainActivity.Music>){
       //}
 
 }
+private fun Long.convertToText(): String {
+    val sec = this / 1000
+    val minutes = sec / 60
+    val seconds = sec % 60
 
+    val minutesString = if (minutes < 10) {
+        "0$minutes"
+    } else {
+        minutes.toString()
+    }
+    val secondsString = if (seconds < 10) {
+        "0$seconds"
+    } else {
+        seconds.toString()
+    }
+    return "$minutesString:$secondsString"
+}
+@Composable
+fun TrackSlider(
+    value: Float,
+    onValueChange: (newValue: Float) -> Unit,
+    onValueChangeFinished: () -> Unit,
+    songDuration: Float
+) {
+    Slider(
+        value = value,
+        onValueChange = {
+            onValueChange(it)
+        },
+        onValueChangeFinished = {
+
+            onValueChangeFinished()
+
+        },
+        valueRange = 0f..songDuration,
+        colors = SliderDefaults.colors(
+            thumbColor = Color.White,
+            activeTrackColor = Color.DarkGray,
+            inactiveTrackColor = Color.White,
+        )
+    )
+}
 
 @Composable
 fun AssetImage(trackName: Int){
