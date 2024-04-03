@@ -128,12 +128,24 @@ fun MainScreen(playList: List<MainActivity.Music>){
 
     }
 
+    val currentPosition = remember {
+        mutableLongStateOf(0)
+    }
+
+    val sliderPosition = remember {
+        mutableLongStateOf(0)
+    }
+
+    val totalDuration = remember {
+        mutableLongStateOf(0)
+    }
       val isPlaying= remember{
           mutableStateOf(false)
       }
       player.addListener(
         object : Player.Listener {
             override fun onTracksChanged(tracks: Tracks) {
+                sliderPosition.longValue = 0
                 // Update UI using current tracks.
                 Log.d("counter", "updateTrack=" + tracks.toString())
                 Log.d(
@@ -141,6 +153,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                     "player.currentMediaItemIndex=" + player.currentMediaItemIndex.toString()
                 )
                 if (!firstLaunch) numberOfTrack.value = player.currentMediaItemIndex + 1;
+
                 Log.d("counter", "firstLaunch=" + firstLaunch)
                 coroutineScope.launch {
                     listState.animateScrollToItem(player.currentMediaItemIndex)
@@ -171,17 +184,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
         }
      )
 
-            val currentPosition = remember {
-                mutableLongStateOf(0)
-            }
 
-            val sliderPosition = remember {
-                mutableLongStateOf(0)
-            }
-
-            val totalDuration = remember {
-                mutableLongStateOf(0)
-            }
 
 
 
@@ -209,23 +212,8 @@ fun MainScreen(playList: List<MainActivity.Music>){
 
           ConstraintLayout(modifier = Modifier
               .padding(5.dp)) {
-              LaunchedEffect(key1 = player.currentPosition, key2 = player.isPlaying) {
-                  Log.d("counter","Launch4")
-                  delay(1000)
-                  currentPosition.longValue = player.currentPosition
-              }
+              Log.d("counter","ConstraintLayout------------------------")
 
-              LaunchedEffect(currentPosition.longValue) {
-                  Log.d("counter","Launch5")
-                  sliderPosition.longValue = currentPosition.longValue
-              }
-
-              LaunchedEffect(player.duration) {
-                  //  Log.d("counter","Launch6")
-                  if (player.duration > 0) {
-                      totalDuration.longValue = player.duration
-                  }
-              }
 
               val firstRect = createRef()
               val dashboardRec = createRef()
@@ -246,7 +234,24 @@ fun MainScreen(playList: List<MainActivity.Music>){
                   .background(color = Color(125, 150, 141))
 
               ) {
+                  LaunchedEffect(key1 = player.currentPosition, key2 = player.isPlaying) {
+                      // LaunchedEffect(key1 = player.currentPosition) {
+                      Log.d("counter","Launch4")
+                      delay(1000)
+                      currentPosition.longValue = player.currentPosition
+                  }
 
+                  LaunchedEffect(currentPosition.longValue) {
+                      Log.d("counter","Launch5")
+                      sliderPosition.longValue = currentPosition.longValue
+                  }
+
+                  LaunchedEffect(player.duration) {
+                      Log.d("counter","Launch6")
+                      if (player.duration > 0) {
+                          totalDuration.longValue = player.duration
+                      }
+                  }
                   AssetImage(numberOfTrack.value)
                  // mediaPlayer= AssetPlayer(numberOfTrack.value)
               }
@@ -272,7 +277,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                               //.fillMaxWidth(.9f)
                               //.background(Color.Gray)
                               .fillMaxHeight(.2f)
-                              .padding(horizontal = 5.dp),
+                              .padding(horizontal = 0.dp),
                               horizontalArrangement = Arrangement.Center,
 
                       ) {
@@ -293,7 +298,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                           Row(
                               modifier = Modifier.fillMaxWidth(),
                           ) {
-
+                           /*
                               Text(
                                   text = (currentPosition.longValue).convertToText(),
                                   modifier = Modifier
@@ -311,6 +316,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                                   color = Color.Black,
                                   style = TextStyle(fontWeight = FontWeight.Bold)
                               )
+                              */
                           }
                       }
                       //Spacer(modifier = Modifier.height(20.dp))
@@ -512,16 +518,20 @@ fun MainScreen(playList: List<MainActivity.Music>){
                                 .fillMaxWidth()
                                 .clickable {
                                     if (isPlaying.value) {
-                                       // var track=numberOfTrack.value-1;
-                                       // if(numberOfTrack.value==0){
-                                       //     track=0
-                                       //     numberOfTrack.value=1
-                                       // }
+                                        // var track=numberOfTrack.value-1;
+                                        // if(numberOfTrack.value==0){
+                                        //     track=0
+                                        //     numberOfTrack.value=1
+                                        // }
                                         player.seekTo(index, C.TIME_UNSET);
                                         player.setPlayWhenReady(true);
                                         player.play()
                                         //isPlaying.value = true
+
+                                    }else{
+                                        sliderPosition.longValue = 0
                                     }
+
                                     numberOfTrack.value = index + 1
                                     //playingSongIndex.value=index;
                                     // Log.d("image", numberOfTrack.value.toString())
@@ -541,7 +551,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
       //}
 
 }
-private fun Long.convertToText(): String {
+/*private fun Long.convertToText(): String {
     val sec = this / 1000
     val minutes = sec / 60
     val seconds = sec % 60
@@ -557,7 +567,7 @@ private fun Long.convertToText(): String {
         seconds.toString()
     }
     return "$minutesString:$secondsString"
-}
+}*/
 @Composable
 fun TrackSlider(
     value: Float,
@@ -570,6 +580,8 @@ fun TrackSlider(
         onValueChange = {
             onValueChange(it)
         },
+        steps = 5,
+        
         onValueChangeFinished = {
 
             onValueChangeFinished()

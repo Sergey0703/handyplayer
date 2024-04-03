@@ -219,6 +219,107 @@ class MainActivity : ComponentActivity() {
                 cover = "assets.image20",
                 music = R.raw.track20
             ),
+            Music(
+                name = "Hickory Dickory Dock",
+                cover = "assets.image21",
+                music = R.raw.track21
+            ),
+            Music(
+                name = "Bobby Shaftoe",
+                cover = "assets.image22",
+                music = R.raw.track22
+            ),
+            Music(
+                name = "Ten in the Bed",
+                cover = "assets.image23",
+                music = R.raw.track23
+            ),
+            Music(
+                name = "Little Miss Muffet",
+                cover = "assets.image24",
+                music = R.raw.track24
+            ),
+            Music(
+                name = "Humpty Dumpty",
+                cover = "assets.image25",
+                music = R.raw.track25
+            ),
+            Music(
+                name = "This Old Man",
+                cover = "assets.image26",
+                music = R.raw.track26
+            ),
+            Music(
+                name = "Five Little Speckled Frogs",
+                cover = "assets.image27",
+                music = R.raw.track27
+            ),
+            Music(
+                name = "Baa Baa Black Sheep",
+                cover = "assets.image28",
+                music = R.raw.track28
+            ),
+            Music(
+                name = "Ring a Ring O' Roses",
+                cover = "assets.image29",
+                music = R.raw.track29
+            ),
+            Music(
+                name = "With My Foot I Tap Tap Tap",
+                cover = "assets.image30",
+                music = R.raw.track30
+            ),
+            Music(
+                name = "Jack and Jill",
+                cover = "assets.image31",
+                music = R.raw.track31
+            ),
+            Music(
+                name = "The Alphabet Song",
+                cover = "assets.image32",
+                music = R.raw.track32
+            ),
+            Music(
+                name = "Polly Put the Kettle On",
+                cover = "assets.image33",
+                music = R.raw.track33
+            ),
+            Music(
+                name = "She'll Be Coming Round the Mountain",
+                cover = "assets.image34",
+                music = R.raw.track34
+            ),
+            Music(
+                name = "One Finger One Thumb",
+                cover = "assets.image35",
+                music = R.raw.track35
+            ),
+            Music(
+                name = "One Man Went to Mow",
+                cover = "assets.image36",
+                music = R.raw.track36
+            ),
+            Music(
+                name = "London Bridge Is Falling Down",
+                cover = "assets.image37",
+                music = R.raw.track37
+            ),
+            Music(
+                name = "The Muffin Man",
+                cover = "assets.image38",
+                music = R.raw.track38
+            ),
+            Music(
+                name = "Five Little Ducks",
+                cover = "assets.image39",
+                music = R.raw.track39
+            ),
+            Music(
+                name = "Pop! Goes the Weasel",
+                cover = "assets.image40",
+                music = R.raw.track40
+            ),
+
         )
     }
 
