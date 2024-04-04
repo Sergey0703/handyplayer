@@ -65,6 +65,10 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.serhiibaliasnyi.cozyplayer.MainActivity
 import com.serhiibaliasnyi.cozyplayer.R
+import com.serhiibaliasnyi.cozyplayer.ui.theme.ActionColor
+import com.serhiibaliasnyi.cozyplayer.ui.theme.GreenBackground
+import com.serhiibaliasnyi.cozyplayer.ui.theme.GreenMain
+import com.serhiibaliasnyi.cozyplayer.ui.theme.MainActionColor
 import com.serhiibaliasnyi.cozyplayer.ui.theme.irishGroverFontFamily
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -231,7 +235,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                       height = Dimension.percent(0.7f)
                   }
                   //.background(color = Color.Red)
-                  .background(color = Color(125, 150, 141))
+                  .background(color = GreenBackground)
 
               ) {
                   LaunchedEffect(key1 = player.currentPosition, key2 = player.isPlaying) {
@@ -268,7 +272,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                       //height = Dimension.fillToConstraints
                       height = Dimension.percent(0.3f)
                   }
-                  .background(color = Color(0, 81, 65)),
+                  .background(color = GreenMain),
                   contentAlignment = Alignment.Center
               ) {
                   Column(){
@@ -358,7 +362,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                           shape = CircleShape,
                           // border= BorderStroke(5.dp, Color(0XFF0F9D58)),
                           contentPadding = PaddingValues(0.dp),
-                          //colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.White)
+                          //colors = ButtonDefaults.outlinedButtonColors(contentColor =  ActionColor)
                           colors = ButtonDefaults.outlinedButtonColors()
                           //colors = Color(246, 151, 64),
                       ) {
@@ -367,7 +371,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                               imageVector = ImageVector.vectorResource(R.drawable.button_prev),
                               contentDescription = "content description",
                              // tint = Color(246, 151, 64),
-                              tint = Color(255, 255, 255),
+                              tint = ActionColor,
                               modifier = Modifier.size(100.dp)
                           )
                       }
@@ -418,18 +422,15 @@ fun MainScreen(playList: List<MainActivity.Music>){
                           Icon(
                               imageVector = ImageVector.vectorResource(R.drawable.button_play),
                               contentDescription = "content description",
-                              tint = Color(246, 151, 64),
-                              //tint = Color(255, 255, 255),
-                              modifier = Modifier
+                              tint = MainActionColor,
+                                   modifier = Modifier
                                   .size(100.dp)
                                   .padding(0.dp),
-                             // size=20.dp
-                          )} else{
+                              )} else{
                               Icon(
                                   imageVector = ImageVector.vectorResource(R.drawable.button_pause),
                                   contentDescription = "content description",
-                                  tint = Color(246, 151, 64),
-                                  //tint = Color(255, 255, 255),
+                                  tint = MainActionColor,
                                   modifier = Modifier.size(100.dp)
                               )
                           }
@@ -466,7 +467,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                               imageVector = ImageVector.vectorResource(R.drawable.button_next),
                               contentDescription = "content description",
                               //tint = Color(246, 151, 64),
-                              tint = Color(255, 255, 255),
+                              tint = ActionColor,
                               modifier = Modifier.size(100.dp)
                           )
                       }
@@ -488,7 +489,7 @@ fun MainScreen(playList: List<MainActivity.Music>){
                       height = Dimension.fillToConstraints
                       //  height=Dimension.value(300.dp)
                   }
-                  .background(color = Color(125, 150, 141))
+                  .background(color = GreenBackground)
               ) {
                    LazyColumn(state = listState) {
                     //itemsIndexed(list){index, title->
@@ -496,16 +497,16 @@ fun MainScreen(playList: List<MainActivity.Music>){
                     Card(
                         colors = CardDefaults.cardColors(
                            // containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            containerColor = Color(0,81,65)
+                            containerColor = GreenMain
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(3.dp)
                           ) {
                         val color = if (index+1==numberOfTrack.value) {
-                            Color(246, 151, 64)
+                            MainActionColor
                         } else {
-                            Color.White
+                            ActionColor
                         }
                         Text(text = title.name,
                             textAlign = TextAlign.Center,
@@ -589,9 +590,9 @@ fun TrackSlider(
         },
         valueRange = 0f..songDuration,
         colors = SliderDefaults.colors(
-            thumbColor = Color(246, 151, 64),
-            activeTrackColor = Color(246, 151, 64),
-            inactiveTrackColor = Color.White,
+            thumbColor = MainActionColor,
+            activeTrackColor = MainActionColor,
+            inactiveTrackColor = ActionColor,
         )
     )
 }
