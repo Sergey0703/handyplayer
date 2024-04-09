@@ -83,7 +83,6 @@ import kotlin.time.Duration.Companion.seconds
 fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
     Log.d("counter", "Recomposition-------------------------------------------------------")
     //lateinit var player: ExoPlayer
-    //val context = ContextAmbient.current
     val context =   LocalContext.current
     //player = ExoPlayer.Builder(context).build()
 
@@ -93,7 +92,6 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
     val list =   remember {
         mutableListOf<String>()
     }
-    //var i:Int=0
 
     var currentValue by remember { mutableStateOf(0L) }
     var isPlaying by remember { mutableStateOf(false) }
@@ -108,7 +106,6 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
 
     LaunchedEffect(numberOfTrack.value) {
         Log.d("counter","Launch1")
-
         playingSongIndex.intValue = numberOfTrack.value-1
       //  player.seekTo(numberOfTrack.value-1, 0)
     }
@@ -140,10 +137,8 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
     val totalDuration = remember {
         mutableLongStateOf(0)
     }
-    //Log.d("counter","firstLaunch=${firstLaunch.value}")
-    LaunchedEffect(player.currentMediaItemIndex) {
-        //LaunchedEffect(player.currentMediaItemIndex) {
 
+    LaunchedEffect(player.currentMediaItemIndex) {
         // playingSongIndex.intValue = player.currentMediaItemIndex
         sliderPosition.longValue = 0
         currentPosition.longValue = 0
@@ -153,20 +148,12 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
                 listState.animateScrollToItem(player.currentMediaItemIndex)
         }
        Log.d("counter", "Launch=" )
-        //coroutineScope.launch {
-
-        //55    listState.animateScrollToItem(player.currentMediaItemIndex)
-        //}
         if (!firstLaunch.value){
             numberOfTrack.value= playingSongIndex.intValue+1
         }else{
             firstLaunch.value=false
         }
-
-
     }
-
-
 
     DisposableEffect(Unit) {
         val listener = object : Player.Listener {
@@ -191,22 +178,22 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
             }
         }
     }
-    LaunchedEffect(key1 = player.currentPosition, key2 = player.isPlaying) {
-        // LaunchedEffect(key1 = player.currentPosition) {
-     //   Log.d("counter", "Launch4")
-     //   delay(500)
-     //   currentPosition.longValue = player.currentPosition
-    }
+   // LaunchedEffect(key1 = player.currentPosition, key2 = player.isPlaying) {
+      // LaunchedEffect(key1 = player.currentPosition) {
+      //   Log.d("counter", "Launch4")
+      //   delay(500)
+      //   currentPosition.longValue = player.currentPosition
+   // }
 
-    LaunchedEffect(currentPosition.longValue) {
-        Log.d("counter", "Launch5")
+   // LaunchedEffect(currentPosition.longValue) {
+      //  Log.d("counter", "Launch5")
       //  sliderPosition.longValue = currentPosition.longValue
-    }
+   // }
 
     LaunchedEffect(player.duration) {
 
         if (player.duration > 0) {
-            Log.d("counter", "Launch6")
+     //       Log.d("counter", "Launch6")
             totalDuration.longValue = player.duration
         }
     }
@@ -229,27 +216,19 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
                 }
                 coroutineScope.launch {
                 //55    listState.animateScrollToItem(player.currentMediaItemIndex)
-
                 }
-
-
-
             }
-
             override fun onPlaybackStateChanged(state: Int) {
                 if (state == Player.STATE_ENDED) {
                     isPlaying.value = false
                 }
             }
-
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 if (playWhenReady && playbackState == Player.STATE_READY) {
                     // media actually playing
-                 //   Log.d("counter", "LaunchP------${player.currentPosition}")
-
+                  //   Log.d("counter", "LaunchP------${player.currentPosition}")
                   //  sliderPosition.longValue = 0
                    // totalDuration.longValue =player.duration
-
 
                     //  delay(1000)
                 } else if (playWhenReady) {
@@ -275,13 +254,9 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
                     // player.playerError for details.
                 }
             }
-
-
         }
     )
-
 */
-
 
     Row(
         modifier = Modifier
@@ -295,9 +270,7 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
             .fillMaxWidth(0.6f)) {
             Box(modifier = Modifier
                         .fillMaxHeight(0.7f)) {
-
                 AssetImage(numberOfTrack)
-
             }
 
             Row(  modifier = Modifier
@@ -308,10 +281,8 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
 
                         ) {
                 Log.d("counter", "Main222222222222222222")
-                        //   Log.d("counter","value="+sliderPosition.longValue.toFloat())
                         TrackSlider(
                             value = sliderPosition.longValue.toFloat(),
-
                             onValueChange = {
                                 sliderPosition.longValue = it.toLong()
                             },
@@ -334,19 +305,14 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
 
                         Button(
                             onClick = {
-
                                 if (numberOfTrack.value > 1) {
                                     sliderPosition.longValue = 0
                                     currentPosition.longValue = 0
                                     if (player.isPlaying) {
-                                        //    numberOfTrack.value -= 1
                                         player.seekToPreviousMediaItem()
                                         numberOfTrack.value = player.currentMediaItemIndex + 1
                                     } else {
                                         numberOfTrack.value -= 1
-                                    //    coroutineScope.launch {
-                                    //        listState.animateScrollToItem(numberOfTrack.value - 1)
-                                    //    }
                                     }
                                 }
                             },
@@ -356,10 +322,8 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
                             contentPadding = PaddingValues(0.dp),
                             //colors = ButtonDefaults.outlinedButtonColors(contentColor =  ActionColor)
                             colors = ButtonDefaults.outlinedButtonColors()
-                            //colors = Color(246, 151, 64),
-                        ) {
-                            // Adding an Icon "Add" inside the Button
-                            Icon(
+                           ) {
+                                Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.button_prev),
                                 contentDescription = "content description",
                                 // tint = Color(246, 151, 64),
@@ -368,33 +332,23 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
                             )
                         }
 
-
                         Button(
-
                             onClick = {
                                 firstLaunch.value = false;
                                 if (player.isPlaying) {
-
                                     player.pause()
-                                 //   isPlaying.value = false
                                 } else {
                                     if (player.currentMediaItemIndex != numberOfTrack.value - 1) {
-
                                         if (numberOfTrack.value == 0) {
-
                                             numberOfTrack.value = 1
                                          //   player.seekTo(0, C.TIME_UNSET);
-
                                         } else {
                                             player.seekTo(numberOfTrack.value - 1, C.TIME_UNSET);
                                         }
-
                                     }
-                                    //numberOfTrack.value = 1
                                     player.setPlayWhenReady(true);
                                     player.play()
-                                  //  isPlaying.value = true
-                                }
+                                 }
 
                             },
                             shape = CircleShape,
@@ -402,7 +356,6 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
                             contentPadding = PaddingValues(0.dp),
                             colors = ButtonDefaults.outlinedButtonColors()
                             ) {
-                            // Adding an Icon "Add" inside the Button
                             if (!player.isPlaying) {
                                 Icon(
                                     imageVector = ImageVector.vectorResource(R.drawable.button_play),
@@ -430,34 +383,25 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
                                     currentPosition.longValue = 0
                                     if (player.isPlaying) {
                                         player.seekToNextMediaItem()
-                                        //Log.d("state",player.seekToNextMediaItem().toString())
-                                      //  numberOfTrack.value = player.currentMediaItemIndex + 1
                                     } else {
                                         numberOfTrack.value = numberOfTrack.value + 1
-                                        //coroutineScope.launch {
-                                        //    listState.animateScrollToItem(numberOfTrack.value - 1)
-                                        //}
                                     }
                                 }
                             },
                              shape = CircleShape,
                             // border= BorderStroke(5.dp, Color(0XFF0F9D58)),
                             contentPadding = PaddingValues(0.dp),
-                            //colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
                             colors = ButtonDefaults.outlinedButtonColors()
                           ) {
                              Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.button_next),
                                 contentDescription = "content description",
-                                //tint = Color(246, 151, 64),
                                 tint = ActionColor,
                                 modifier = Modifier.size(100.dp)
                             )
                         }
                     }
-
         }//column
-
             Box(
                 modifier =
                 Modifier
@@ -506,14 +450,9 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
                         }
                     }
                 } //Lazy Column
-
             } //box
         } //main Row
-
     } //constraint
-
-
-
 
 /*private fun Long.convertToText(): String {
     val sec = this / 1000
@@ -539,13 +478,12 @@ fun TrackSlider(
     onValueChangeFinished: () -> Unit,
     songDuration: Float
 ) {
-    //Log.d("counter","value=${value} onValueChange=${onValueChange} onValueChangeFinished=${onValueChangeFinished} songDuration=${songDuration}")
     Slider(
         value = value,
         onValueChange = {
             onValueChange(it)
         },
- //       steps = 5,
+ //    steps = 5,
         onValueChangeFinished = {
             onValueChangeFinished()
         },
@@ -581,5 +519,4 @@ fun AssetImage(trackName: MutableState<Int>) {
         alpha = imageAlpha,
         modifier = Modifier.fillMaxSize()
     )
-
 }
