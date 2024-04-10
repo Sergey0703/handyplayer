@@ -281,6 +281,7 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
 
                         ) {
                 Log.d("counter", "Main222222222222222222")
+
                         TrackSlider(
                             value = sliderPosition.longValue.toFloat(),
                             onValueChange = {
@@ -292,7 +293,6 @@ fun MainScreen(playList: List<MainActivity.Music>, player: ExoPlayer) {
                             },
                             songDuration = totalDuration.longValue.toFloat()
                         )
-
                     }
 
             Row( modifier = Modifier

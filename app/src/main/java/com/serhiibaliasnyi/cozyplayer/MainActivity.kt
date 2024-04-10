@@ -248,7 +248,56 @@ class MainActivity : ComponentActivity() {
                 cover = "assets.image40",
                 music = R.raw.track40
             ),
-
+            Music(
+                name = "Here We Go Looby Loo",
+                cover = "assets.image41",
+                music = R.raw.track40
+            ),
+          /*  Music(
+                name = "Sing a Song of Sixpence",
+                cover = "assets.image42",
+                music = R.raw.track42
+            ),
+            Music(
+                name = "Three Blind Mice",
+                cover = "assets.image43",
+                music = R.raw.track43
+            ),
+            Music(
+                name = "The Grand Old Duke of York",
+                cover = "assets.image44",
+                music = R.raw.track44
+            ),
+            Music(
+                name = "One Potato Two Potato",
+                cover = "assets.image45",
+                music = R.raw.track45
+            ),
+            Music(
+                name = "Miss Polly Had a Dolly",
+                cover = "assets.image46",
+                music = R.raw.track46
+            ),
+            Music(
+                name = "Open Shut Them",
+                cover = "assets.image47",
+                music = R.raw.track47
+            ),
+            Music(
+                name = "Here We Go Round the Mulberry Bush",
+                cover = "assets.image48",
+                music = R.raw.track48
+            ),
+            Music(
+                name = "Drunken Sailor",
+                cover = "assets.image49",
+                music = R.raw.track49
+            ),
+            Music(
+                name = "Mary Had a Little Lamb",
+                cover = "assets.image50",
+                music = R.raw.track50
+            ) */
         )
     }
 
